@@ -60,7 +60,7 @@ Future<void> fetchFromMyID(StreamController<Message?> myController, ChatID myID,
   try {
     while (!myController.isClosed) {
       Message? s = await fetchMessages(myID);
-      if (s?.text?.toLowerCase() == "/exit") {
+      if (s?.text?.toLowerCase() == "/bye") {
         myController.add(null);
         myController.close();
         endUserController.add(null);
@@ -79,7 +79,7 @@ Future<void> fetchFromEndUserID(StreamController<Message?> endUserController,
   try {
     while (!endUserController.isClosed) {
       Message? s = await fetchMessages(endUserID);
-      if (s?.text?.toLowerCase() == "/exit") {
+      if (s?.text?.toLowerCase() == "/bye") {
         endUserController.add(null);
         endUserController.close();
         myController.add(null);
