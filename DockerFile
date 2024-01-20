@@ -9,6 +9,6 @@ RUN dart compile exe bin/randomchatele.dart  -o bin/bin/randomchatele
 
 FROM scratch
 COPY --from=build /runtime/ /
-COPY --from=build /app/bin/server /app/bin/
+COPY --from=build /app/bin/randomchatele /app/bin/
 
-CMD ["/app/bin/server"]
+CMD ["/app/bin/randomchatele"]
