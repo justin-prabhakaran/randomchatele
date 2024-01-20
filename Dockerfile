@@ -8,14 +8,15 @@ WORKDIR /app
 COPY pubspec.yaml pubspec.lock /app/
 
 # Install dependencies
-RUN pub get
+RUN dart pub get
 
 # Copy the entire project to the container
 COPY . /app/
 
 # Build the Dart application
-RUN pub get --offline
-RUN pub build
+RUN dart pub get --offline
+RUN dart pub run build_runner build --delete-conflicting-outputs
 
 # Specify the command to run on container start
-CMD ["dart", "build/bin/randomchatele.dart"]
+CMD ["dart", "bin/randomchatele.dart"]
+
