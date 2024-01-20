@@ -5,7 +5,7 @@ import 'package:televerse/telegram.dart';
 
 import 'package:televerse/televerse.dart';
 
-void makeConnection(ChatID myID) async {
+void makeConnection(ChatID myID, Message m) async {
   try {
     StreamController<Message?> myController = StreamController<Message?>();
     StreamController<Message?> endUserController = StreamController<Message?>();
@@ -15,11 +15,12 @@ void makeConnection(ChatID myID) async {
     print("my : ${myID.id}");
 
     if (endUserID != myID) {
-      await bot.api.sendMessage(myID, "Connected ${endUserID.id}");
-      await bot.api.sendMessage(endUserID, "Connected ${myID.id}");
-
       users.remove(myID);
       users.remove(endUserID);
+      await bot.api.editMessageText(
+          myID, m.messageId, "@Bot : Connected with ${endUserID.id}");
+      await bot.api.sendMessage(endUserID, "@Bot : Connected with ${myID.id}");
+
       print(users);
 
       fetchFromMyID(myController, myID, endUserController);
@@ -27,16 +28,10 @@ void makeConnection(ChatID myID) async {
 
       myController.stream.listen((data) async {
         try {
-          if (data?.audio != null) {
-            await bot.api.sendAudio(
-                endUserID, InputFile.fromFileId(data?.audio?.fileId ?? ""));
-          } else if (data?.photo != null) {
-            await bot.api.sendPhoto(endUserID,
-                InputFile.fromFileId(data?.photo?.first.fileId ?? ""));
-          } else if (data?.text != null) {
-            await bot.api.sendMessage(endUserID, data?.text ?? "Error");
-          } else if (data == null) {
-            await bot.api.sendMessage(endUserID, "Bot : Connection Terminated");
+          if (data != null) {
+            bot.api.copyMessage(endUserID, myID, data.messageId);
+          } else {
+            bot.api.sendMessage(endUserID, "@Bot : Connection terminated");
           }
         } catch (e) {
           print("Error in myController stream: $e");
@@ -45,16 +40,10 @@ void makeConnection(ChatID myID) async {
 
       endUserController.stream.listen((data) async {
         try {
-          if (data?.audio?.fileId != null) {
-            await bot.api.sendAudio(
-                myID, InputFile.fromFileId(data?.audio?.fileId ?? ""));
-          } else if (data?.photo?.first != null) {
-            await bot.api.sendPhoto(
-                myID, InputFile.fromFileId(data?.photo?.first.fileId ?? ""));
-          } else if (data?.text != null) {
-            await bot.api.sendMessage(myID, data!.text!);
-          } else if (data == null) {
-            await bot.api.sendMessage(myID, "Bot : Connection Terminated");
+          if (data != null) {
+            bot.api.copyMessage(myID, endUserID, data.messageId);
+          } else {
+            bot.api.sendMessage(myID, "@Bot : Connection terminated");
           }
         } catch (e) {
           print("Error in endUserController stream: $e");
@@ -112,7 +101,10 @@ Future<Message?> fetchMessages(ChatID id) async {
             filter: (up) {
               return up.message?.audio != null ||
                   up.message?.photo != null ||
-                  up.message?.text != null;
+                  up.message?.text != null ||
+                  up.message?.animation != null ||
+                  up.message?.contact != null ||
+                  up.message?.document != null;
             })
         .then((value) => value.update.message);
   } catch (e) {
