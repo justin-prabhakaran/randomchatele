@@ -1,17 +1,5 @@
-# Use a Debian-based image
-FROM debian:bullseye-slim
-
-# Install dependencies
-RUN apt-get update && apt-get install -y wget
-
-# Download and install Dart SDK
-RUN wget https://dart.dev/get-dart/stable/latest/linux_debian -O dart.tar.gz && \
-    tar xf dart.tar.gz && \
-    mv dart /opt/dart && \
-    rm dart.tar.gz
-
-# Add Dart binaries to the PATH
-ENV PATH "$PATH:/opt/dart/bin"
+# Use the official Dart image as the base image
+FROM dart:3.2.5-sdk AS build
 
 # Set the working directory in the container
 WORKDIR /app
