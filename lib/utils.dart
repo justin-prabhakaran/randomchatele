@@ -7,3 +7,7 @@ Bot bot = Bot(API_KEY);
 final Queue<ChatID> users = Queue<ChatID>();
 
 Conversation conv = Conversation(bot);
+String startstr = """/connectme => new Connection
+/bye => terminating connection
+
+Enjoy with Strangers !""";

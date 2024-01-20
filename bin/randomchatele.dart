@@ -4,31 +4,34 @@ import 'package:televerse/telegram.dart';
 import 'package:televerse/televerse.dart';
 
 void main() {
+  print("Started");
   try {
     ChatID myID;
 
     bot.command("start", (ctx) {
-      ctx.reply("""/connectme => new Connection
-/bye => terminating connection
-
-Enjoy with Strangers !""");
+      print("User : ${ctx.from?.firstName} is online");
+      ctx.reply(startstr);
     });
 
     bot.command("connectme", (ctx) async {
-      print("User : ${ctx.from?.firstName} is online");
-
       ///users.add(ChatID(DateTime.now().millisecondsSinceEpoch));
       myID = ChatID(ctx.chat.id);
+
       if (!users.contains(myID)) {
         users.addLast(myID);
       }
-      print(users);
+
+      users.map((e) {
+        print("User :${e.id}");
+      });
+
       Message m = await ctx.reply("@Bot : Connecting.......");
-      makeConnection(myID, m);
+      await makeConnection(myID, m);
     });
 
     bot.start();
   } catch (e) {
     print(e);
   }
+  // print("Ended");
 }

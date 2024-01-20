@@ -5,10 +5,15 @@ import 'package:televerse/telegram.dart';
 
 import 'package:televerse/televerse.dart';
 
-void makeConnection(ChatID myID, Message m) async {
+Future<void> makeConnection(ChatID myID, Message m) async {
   try {
+    users.map((e) {
+      print("User :${e.id}");
+    });
+
     StreamController<Message?> myController = StreamController<Message?>();
     StreamController<Message?> endUserController = StreamController<Message?>();
+
     ChatID endUserID = users.first;
 
     print("user A : ${endUserID.id}");
@@ -17,11 +22,14 @@ void makeConnection(ChatID myID, Message m) async {
     if (endUserID != myID) {
       users.remove(myID);
       users.remove(endUserID);
+
+      users.map((e) {
+        print("User :${e.id}");
+      });
+
       await bot.api.editMessageText(
           myID, m.messageId, "@Bot : Connected with ${endUserID.id}");
       await bot.api.sendMessage(endUserID, "@Bot : Connected with ${myID.id}");
-
-      print(users);
 
       fetchFromMyID(myController, myID, endUserController);
       fetchFromEndUserID(endUserController, endUserID, myController);
@@ -30,6 +38,7 @@ void makeConnection(ChatID myID, Message m) async {
         try {
           if (data != null) {
             bot.api.copyMessage(endUserID, myID, data.messageId);
+            print("[${myID.id} - ${endUserID.id}] : ${data.text!}"); //print
           } else {
             bot.api.sendMessage(endUserID, "@Bot : Connection terminated");
           }
@@ -42,6 +51,7 @@ void makeConnection(ChatID myID, Message m) async {
         try {
           if (data != null) {
             bot.api.copyMessage(myID, endUserID, data.messageId);
+            print("[${endUserID.id} - ${myID.id}] : ${data.text!}"); //print
           } else {
             bot.api.sendMessage(myID, "@Bot : Connection terminated");
           }
@@ -104,7 +114,8 @@ Future<Message?> fetchMessages(ChatID id) async {
                   up.message?.text != null ||
                   up.message?.animation != null ||
                   up.message?.contact != null ||
-                  up.message?.document != null;
+                  up.message?.document != null ||
+                  up.message?.sticker != null;
             })
         .then((value) => value.update.message);
   } catch (e) {
