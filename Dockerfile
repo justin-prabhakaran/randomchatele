@@ -18,4 +18,4 @@ RUN pub get --offline
 RUN pub build
 
 # Specify the command to run on container start
-CMD ["dart", "build/bin/main.dart"]
+CMD ["dart", "build/bin/randomchatele.dart"]
