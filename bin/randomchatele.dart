@@ -15,6 +15,8 @@ Enjoy with Strangers !""");
     });
 
     bot.command("connectme", (ctx) async {
+      print("User : ${ctx.from?.firstName} is online");
+
       ///users.add(ChatID(DateTime.now().millisecondsSinceEpoch));
       myID = ChatID(ctx.chat.id);
       if (!users.contains(myID)) {

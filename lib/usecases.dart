@@ -11,8 +11,8 @@ void makeConnection(ChatID myID, Message m) async {
     StreamController<Message?> endUserController = StreamController<Message?>();
     ChatID endUserID = users.first;
 
-    print("End : ${endUserID.id}");
-    print("my : ${myID.id}");
+    print("user A : ${endUserID.id}");
+    print("User B : ${myID.id}");
 
     if (endUserID != myID) {
       users.remove(myID);
