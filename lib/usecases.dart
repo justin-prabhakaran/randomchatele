@@ -38,7 +38,7 @@ Future<void> makeConnection(ChatID myID, Message m) async {
         try {
           if (data != null) {
             await bot.api.copyMessage(endUserID, myID, data.messageId);
-            print("[${myID.id} - ${endUserID.id}] : ${data.text!}"); //print
+            print("[${myID.id} - ${endUserID.id}] : ${data.text}"); //print
           } else {
            await bot.api.sendMessage(endUserID, "@Bot : Connection terminated");
           }
@@ -51,7 +51,7 @@ Future<void> makeConnection(ChatID myID, Message m) async {
         try {
           if (data != null) {
             await bot.api.copyMessage(myID, endUserID, data.messageId);
-            print("[${endUserID.id} - ${myID.id}] : ${data.text!}"); //print
+            print("[${endUserID.id} - ${myID.id}] : ${data.text}"); //print
           } else {
             await bot.api.sendMessage(myID, "@Bot : Connection terminated");
           }
