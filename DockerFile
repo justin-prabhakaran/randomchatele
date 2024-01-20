@@ -6,10 +6,6 @@ COPY pubspec.* ./
 RUN dart pub get
 
 COPY . .
-RUN dart compile exe bin/randomchatele.dart  -o bin/bin/randomchatele
-
-FROM scratch
-COPY --from=build /runtime/ /
-COPY --from=build /app/bin/randomchatele /app/bin/
+RUN dart compile exe bin/randomchatele.dart  -o bin/randomchatele
 
 CMD ["/app/bin/randomchatele"]
