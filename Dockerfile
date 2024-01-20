@@ -15,7 +15,7 @@ COPY . /app/
 
 # Build the Dart application
 RUN dart pub get --offline
-
+EXPOSE 8080
 # Specify the command to run on container start
 CMD ["dart", "bin/randomchatele.dart"]
 
