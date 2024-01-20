@@ -10,6 +10,7 @@ void main() {
   });
 
   bot.command("connectme", (ctx) {
+    ///users.add(ChatID(DateTime.now().millisecondsSinceEpoch));
     myID = ChatID(ctx.chat.id);
     if (!users.contains(myID)) {
       users.addLast(myID);
