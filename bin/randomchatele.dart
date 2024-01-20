@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:randomchatele/usecases.dart';
 import 'package:randomchatele/utils.dart';
 import 'package:televerse/telegram.dart';
@@ -7,11 +9,6 @@ void main() {
   print("Started");
   try {
     ChatID myID;
-
-    bot.command("start", (ctx) {
-      print("User : ${ctx.from?.firstName} is online");
-      ctx.reply(startstr);
-    });
 
     bot.command("connectme", (ctx) async {
       ///users.add(ChatID(DateTime.now().millisecondsSinceEpoch));
@@ -29,9 +26,15 @@ void main() {
       await makeConnection(myID, m);
     });
 
-    bot.start();
+    bot.start(handle);
   } catch (e) {
     print(e);
   }
   // print("Ended");
+}
+
+FutureOr<void> handle(MessageContext ctx) async {
+  
+  print("User : ${ctx.from?.firstName} is online");
+  await ctx.reply(startstr);
 }

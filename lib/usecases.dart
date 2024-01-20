@@ -37,10 +37,10 @@ Future<void> makeConnection(ChatID myID, Message m) async {
       myController.stream.listen((data) async {
         try {
           if (data != null) {
-            bot.api.copyMessage(endUserID, myID, data.messageId);
+            await bot.api.copyMessage(endUserID, myID, data.messageId);
             print("[${myID.id} - ${endUserID.id}] : ${data.text!}"); //print
           } else {
-            bot.api.sendMessage(endUserID, "@Bot : Connection terminated");
+           await bot.api.sendMessage(endUserID, "@Bot : Connection terminated");
           }
         } catch (e) {
           print("Error in myController stream: $e");
@@ -50,10 +50,10 @@ Future<void> makeConnection(ChatID myID, Message m) async {
       endUserController.stream.listen((data) async {
         try {
           if (data != null) {
-            bot.api.copyMessage(myID, endUserID, data.messageId);
+            await bot.api.copyMessage(myID, endUserID, data.messageId);
             print("[${endUserID.id} - ${myID.id}] : ${data.text!}"); //print
           } else {
-            bot.api.sendMessage(myID, "@Bot : Connection terminated");
+            await bot.api.sendMessage(myID, "@Bot : Connection terminated");
           }
         } catch (e) {
           print("Error in endUserController stream: $e");
