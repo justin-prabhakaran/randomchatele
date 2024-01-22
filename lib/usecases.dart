@@ -1,15 +1,18 @@
 import 'dart:async';
 
-import 'package:randomchatele/utils.dart';
 import 'package:televerse/telegram.dart';
-
 import 'package:televerse/televerse.dart';
 
-Future<void> makeConnection(ChatID myID, Message m) async {
+import 'utils.dart';
+
+Future<void> makeConnection(ChatID myID) async {
   try {
     users.map((e) {
       print("User :${e.id}");
     });
+
+    await bot.api.sendMessage(myID, "@Bot : Connecting...");
+    // await bot.api.sendMessage(endUserID, "@Bot : Connected with ${myID.id}");
 
     StreamController<Message?> myController = StreamController<Message?>();
     StreamController<Message?> endUserController = StreamController<Message?>();
@@ -27,8 +30,7 @@ Future<void> makeConnection(ChatID myID, Message m) async {
         print("User :${e.id}");
       });
 
-      await bot.api.editMessageText(
-          myID, m.messageId, "@Bot : Connected with ${endUserID.id}");
+      await bot.api.sendMessage(myID, "@Bot : Connected with ${endUserID.id}");
       await bot.api.sendMessage(endUserID, "@Bot : Connected with ${myID.id}");
 
       fetchFromMyID(myController, myID, endUserController);
@@ -38,9 +40,11 @@ Future<void> makeConnection(ChatID myID, Message m) async {
         try {
           if (data != null) {
             await bot.api.copyMessage(endUserID, myID, data.messageId);
-            print("[${myID.id} - ${endUserID.id}] : ${data.text}"); //print
+            print(
+                "[${myID.id} - ${endUserID.id}] : ${data.text ?? "<Other Media>"}"); //print
           } else {
-           await bot.api.sendMessage(endUserID, "@Bot : Connection terminated");
+            await bot.api
+                .sendMessage(endUserID, "@Bot : Connection terminated");
           }
         } catch (e) {
           print("Error in myController stream: $e");
@@ -51,7 +55,8 @@ Future<void> makeConnection(ChatID myID, Message m) async {
         try {
           if (data != null) {
             await bot.api.copyMessage(myID, endUserID, data.messageId);
-            print("[${endUserID.id} - ${myID.id}] : ${data.text}"); //print
+            print(
+                "[${endUserID.id} - ${myID.id}] : ${data.text ?? "<Other Media>"}"); //print
           } else {
             await bot.api.sendMessage(myID, "@Bot : Connection terminated");
           }
@@ -60,6 +65,10 @@ Future<void> makeConnection(ChatID myID, Message m) async {
         }
       });
     }
+  } on TelegramException catch (e) {
+    print("Error in makeConnection: $e");
+  } on TeleverseException catch (e) {
+    print("Error in makeConnection: $e");
   } catch (e) {
     print("Error in makeConnection: $e");
   }
@@ -79,6 +88,10 @@ Future<void> fetchFromMyID(StreamController<Message?> myController, ChatID myID,
       }
       myController.add(s);
     }
+  } on TelegramException catch (e) {
+    print("Error in fetchFromMyID: $e");
+  } on TeleverseException catch (e) {
+    print("Error in fetchFromMyID: $e");
   } catch (e) {
     print("Error in fetchFromMyID: $e");
   }
@@ -98,6 +111,10 @@ Future<void> fetchFromEndUserID(StreamController<Message?> endUserController,
       }
       endUserController.add(s);
     }
+  } on TelegramException catch (e) {
+    print("Error in fetchFromEndUserID: $e");
+  } on TeleverseException catch (e) {
+    print("Error in fetchFromEndUserID: $e");
   } catch (e) {
     print("Error in fetchFromEndUserID: $e");
   }
@@ -118,8 +135,12 @@ Future<Message?> fetchMessages(ChatID id) async {
                   up.message?.sticker != null;
             })
         .then((value) => value.update.message);
+  } on TelegramException catch (e) {
+    print("Error in fetchMessages: $e");
+  } on TeleverseException catch (e) {
+    print("Error in fetchMessages: $e");
   } catch (e) {
     print("Error in fetchMessages: $e");
-    return null;
   }
+  return null;
 }

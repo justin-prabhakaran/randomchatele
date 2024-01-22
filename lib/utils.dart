@@ -2,7 +2,8 @@ import 'dart:collection';
 
 import 'package:televerse/televerse.dart';
 
-const String API_KEY = "6681746324:AAFzg454h41tQnmuinKrt5S4TcbjbxL0Cg0";
+// ignore: constant_identifier_names
+const String API_KEY = "6681746324:AAFin6L448mnyYWxDAgnB8YEfhFf0iEN2fw";
 Bot bot = Bot(API_KEY,
     fetcher: LongPolling(),
     loggerOptions: LoggerOptions(
@@ -16,7 +17,8 @@ final Queue<ChatID> users = Queue<ChatID>();
 
 Conversation conv = Conversation(bot);
 String startstr = """
-/connectmem  👉  New Connection 🫂🍻
+/connectme  👉  New Connection 🫂🍻
 /bye  👉  Terminating connection ❌❗
 
 Embrace new connections and share the joy with friends 🙏""";
+

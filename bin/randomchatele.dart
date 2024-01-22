@@ -2,16 +2,18 @@ import 'dart:async';
 
 import 'package:randomchatele/usecases.dart';
 import 'package:randomchatele/utils.dart';
-import 'package:televerse/telegram.dart';
 import 'package:televerse/televerse.dart';
 
 void main() {
+  bot.onError((err) {
+    print(err.error.toString());
+  });
+
   print("Started");
   try {
     ChatID myID;
 
     bot.command("connectme", (ctx) async {
-      ///users.add(ChatID(DateTime.now().millisecondsSinceEpoch));
       myID = ChatID(ctx.chat.id);
 
       if (!users.contains(myID)) {
@@ -22,11 +24,14 @@ void main() {
         print("User :${e.id}");
       });
 
-      Message m = await ctx.reply("@Bot : Connecting.......");
-      await makeConnection(myID, m);
+      await makeConnection(myID);
     });
 
     bot.start(handle);
+  } on TelegramException catch (e) {
+    print(e);
+  } on TeleverseException catch (e) {
+    print(e);
   } catch (e) {
     print(e);
   }
@@ -34,7 +39,6 @@ void main() {
 }
 
 FutureOr<void> handle(MessageContext ctx) async {
-  
   print("User : ${ctx.from?.firstName} is online");
   await ctx.reply(startstr);
 }
