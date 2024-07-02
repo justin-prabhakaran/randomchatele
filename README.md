@@ -1,2 +1,1 @@
-A sample command-line application with an entrypoint in `bin/`, library code
-in `lib/`, and example unit test in `test/`.
+A Dart-based Telegram bot that pairs users randomly for anonymous chats. Using Telegram's Bot API, it manages private chat sessions, ensuring privacy and anonymity.
